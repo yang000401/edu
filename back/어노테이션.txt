@@ -1,0 +1,13 @@
+@ManyToOne //관계의 주인이다 이곳에서 수정이 일어난다면 반대편도 바뀐다,
+    // 조회 때를 생각해보자 우리는 영속성컨텍스트에서 먼저 goods_sn을 조회할 것이다 하지만 처음 일어나는 일이기에 아마 db로 조회가 넘어간다
+    // db에서 조회 후에 영속성 컨텍스트에 저장이 된다 그후 반환되는 데이터a(객체 변수a) 사용 그렇기에 똑같은 데이터 a를 조회할때 객체 변수b를 사용해도
+    // 영속성 컨텍스트에 데이터a가 있기에 서로 다른 것임에도 동일성이 보장된다
+
+@Data //@Getter, @Setter, @RequiredArgsConstructor, @ToString, @EqualsAndHashCode을 한꺼번에 설정해주는 어노테이션
+@RequiredArgsConstructor //@RequiredArgsConstructor는 final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다.
+
+@DynamicInsert
+@DynamicUpdate
+//기본적으로 하이버네이트는 INSERT와 UPDATE시에 모든 컬럼을 사용한다.
+//@DynamicInsert는 INSERT 구문 생성 시점에 null이 아닌 컬럼들만 포함하며,
+//@DynamicUpdate는 UPDATE구문 생성 시점에 null이 아닌 컬럼만(변경된 값만) 포함한다.

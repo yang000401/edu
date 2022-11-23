@@ -1,0 +1,39 @@
+server:
+  port: 8888
+
+spring:
+  profiles:
+    group:
+      "local": "local"
+    active: local
+
+logging:
+  level:
+    '[net.e4net.demo]': debug
+---
+#local ??
+spring:
+  config:
+    activate:
+      on-profile: local
+#  서버 API 제공을 위해서 swagger 설정
+#  https://kedric-me.tistory.com/entry/swagger-Failed-to-start-bean-documentationPluginsBootstrapper-nested-exception-is-javalangNullPointerException
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/edudb
+    username: edu
+    password: edu
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+#      ddl-auto: update
+      ddl-auto: create-drop
+
+    show-sql: true
+

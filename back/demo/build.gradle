@@ -1,0 +1,111 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'java'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+group = 'net.e4net'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'net.nurigo:sdk:4.2.4'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'com.google.code.gson:gson:2.8.7'
+	implementation 'org.modelmapper:modelmapper:2.4.2' //https://devwithpug.github.io/java/java-modelmapper/
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
+
+	//swagger
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
+
+	// querydsl 디펜던시 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	//jsp, 서버에서 아임포트로 결제처리
+	implementation 'org.apache.tiles:tiles-jsp:3.0.8'
+	implementation 'javax.servlet:jstl'
+	implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
+	//mybatis
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.1'
+	implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.4.1'
+	implementation 'com.github.miemiedev:mybatis-paginator:1.2.17'
+
+
+	//web-jars
+	implementation 'org.webjars:AdminLTE:3.1.0'
+	implementation 'org.webjars.bower:bootstrap:5.1.3'
+	implementation 'org.webjars.npm:jquery:3.6.0'
+	implementation 'org.webjars.bowergithub.components:jqueryui:1.12.1'
+	//타임리프 아임포트
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	//aop용
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+// querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
+def querydslDir = "$buildDir/generated/'querydsl'"
+
+// JPA 사용여부 및 사용 경로 설정
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+// build시 사용할 sourceSet 추가 설정
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+
+// querydsl 컴파일 시 사용할 옵션 설정
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+// querydsl이 compileClassPath를 상속하도록 설정
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}

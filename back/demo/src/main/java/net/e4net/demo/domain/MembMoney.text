@@ -1,0 +1,37 @@
+package net.e4net.demo.domain;
+
+//import lombok.*;
+//import net.e4net.demo.entity.TbMember;
+//import org.springframework.beans.factory.annotation.Autowired;
+//
+//import javax.persistence.*;
+//@Getter
+//@Entity
+//@Table
+//@SequenceGenerator(
+//        name = "MONEY_SEQ_GENERATOR",
+//        sequenceName = "MONEY_SEQ", //매핑할 데이터베이스 시퀀스 이름
+//        initialValue = 1,
+//        allocationSize = 1)
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@RequiredArgsConstructor
+//public class MembMoney extends CommmonData{
+//
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MONEY_SEQ_GENERATOR")
+//    @Column(name = "MENB_SN", length = 10)
+//    private Long membSn;
+//
+//    @OneToOne
+//    @JoinColumn(name = "MEMB_SN", referencedColumnName = "MEMB_SN", updatable = false, insertable = false)
+//    private Member member;
+//
+//    @Builder
+//    private  MembMoney(Member member) {
+//
+//        this.member = member;
+//    }
+//
+//    public static MembMoney createMembMoney(Member member) {
+//        return MembMoney.builder()

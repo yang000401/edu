@@ -1,0 +1,88 @@
+package net.e4net.demo.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
+import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+
+//회원
+@Entity
+@Getter
+@Setter
+@Data //@Getter, @Setter, @RequiredArgsConstructor, @ToString, @EqualsAndHashCode을 한꺼번에 설정해주는 어노테이션
+@AllArgsConstructor
+@Table(name = "TB_MEMB")
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자
+@EntityListeners(AuditingEntityListener.class)
+//@RequiredArgsConstructor //@RequiredArgsConstructor는 final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다.
+@SequenceGenerator(
+        name = "MEMBER_SEQ_GENERATOR" ,
+        sequenceName = "MEMBER_SEQ" ,
+        initialValue = 1 ,
+        allocationSize = 1 )
+public class TbMember extends Base {
+
+    @Id
+    @JsonIgnore
+    @JoinColumn(name = "MEMB_SN")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
+    @Column(name = "MEMB_SN", length = 10) //columnDefinition =
+    private Long membSn;                    // 회원번호
+
+    @Column(name = "MEMB_CLS", length = 20, nullable = false) //columnDefind
+    private String membCls;                 // 회원구분
+
+    @Column(name = "MEMB_STATUS_CD", length = 2, nullable = false)
+    private String membStatusCd;            // 회원상태코드
+
+    @NotNull
+    @Column(name = "MEMB_ID", length = 12, nullable = false)
+    private String membId;                 // 회원ID
+
+    @NotNull
+    @Column(name = "MEMB_PWD", length = 200, nullable = false)
+    private String membPwd;                // 회원패스워드
+
+    @NotNull
+    @Column(name = "MEMB_NM", length = 100)
+    private String membNm;                 // 회원성명
+
+    @Column(name = "MOBILE_NO", length = 20)
+    private String mobileNo;               // 휴대폰번호
+
+    @Column(name = "EMAIL_ADDR", length = 100)
+    private String emaliAddr;              // 이메일주소
+
+    @Column(name = "ZIP_CD", length = 6)
+    private String zipCd;                  // 우편번호
+
+    @Column(name = "ZIP_ADDR", length = 150)
+    private String zipAddr;                // 우편번호주소
+
+    @Column(name = "DETAIL_ADDR", length = 150)
+    private String detailAddr;              // 상세주소
+
+    @Column(name = "LAST_LOGIN_DTM", length = 150)
+    private Timestamp lastLoginDtm;            // 최종로그인 일시
+
+//    @OneToOne(mappedBy = "tbMember", cascade = CascadeType.PERSIST)  // 1 : 1 관계 //부모(mappedBy)
+//    private TbMemMoney tbMemMoney;
+
+    //회원 권한 -> 어드민, 유저, 판매자
+    //연관 관계 //Builder 패턴
+    @Builder
+    private TbMember(String membCls) {
+        this.membCls = membCls;
+    }
+
+    public static TbMember createMember(String membCls){
+        return TbMember.builder()
+                .membCls(membCls)
+                .build();
+    }
+
+
+}
